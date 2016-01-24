@@ -1,0 +1,8 @@
+<!doctype html
+<html
+  <head
+    <title
+      virtual-dom
+    <script
+      @src bundle.js
+  <body
