@@ -11,7 +11,16 @@ type State = {
   rootNode: Element;
 };
 
-const render = (count: number) => {
+const init = (): State => {
+  const count = 0;
+  const tree = render(count);
+  const rootNode = createElement(tree);
+  document.body.appendChild(rootNode);
+  const state = { count, tree, rootNode };
+  return state;
+};
+
+const render = (count: number): VirtualDOM.VNode => {
   return h('div', {
     style: {
       textAlign: 'center',
@@ -31,14 +40,12 @@ const update = ({ count, tree, rootNode }: State): State => {
   return { count: newCount, tree: newTree, rootNode: newRootNode };
 };
 
+const loop = (state: State): void => {
+  setTimeout(() => loop(update(state)), 1000);
+};
+
 export default function main() {
   document.addEventListener('DOMContentLoaded', () => {
-    console.log('load');
-    const count = 0;
-    const tree = render(count);
-    const rootNode = createElement(tree);
-    document.body.appendChild(rootNode);
-    let state = { count, tree, rootNode };
-    setInterval(() => { state = update(state); }, 1000);
+    loop(init());
   });
 }
