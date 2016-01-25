@@ -1,7 +1,9 @@
-import h from 'virtual-dom/h';
-import diff from 'virtual-dom/diff';
-import patch from 'virtual-dom/patch';
-import createElement from 'virtual-dom/create-element';
+import * as VirtualDOM from 'virtual-dom';
+
+const createElement = VirtualDOM.create;
+const diff = VirtualDOM.diff;
+const h = VirtualDOM.h;
+const patch = VirtualDOM.patch;
 
 type State = {
   count: number;
