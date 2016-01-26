@@ -8,6 +8,7 @@ const patch = VirtualDOM.patch;
 
 type State = {
   count: number;
+  items: string[];
 };
 
 type App = {
@@ -28,24 +29,31 @@ const render = (state: State): VirtualDOM.VNode => {
   return h('div', { id: 'app' }, [
     h('div', { className: 'count' }, [
       String(state.count)
-    ])
+    ]),
+    h('ul', state.items.map(item => h('li', [item])))
   ]);
 };
 
-const update = ({ state, tree, rootNode }: App): App => {
-  const newState = { count: state.count + 1 };
-  const newTree = render(newState);
+const updateState = (state: State): State => {
+  return {
+    count: state.count + 1,
+    items: state.items.concat(['item ' + state.count])
+  };
+};
+
+const updateDOM = (state: State, { tree, rootNode }: App): App => {
+  const newTree = render(state);
   const patches = diff(tree, newTree);
   const newRootNode = patch(rootNode, patches);
-  return { state: newState, tree: newTree, rootNode: newRootNode };
+  return { state, tree: newTree, rootNode: newRootNode };
 };
 
 const loop = (app: App): void => {
-  setTimeout(() => loop(update(app)), 1000);
+  setTimeout(() => loop(updateDOM(updateState(app.state), app)), 1000);
 };
 
 export default function main() {
-  const state = { count: 15 };
+  const state: State = { count: 15, items: [] };
   document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => loop(init(state)), 3000);
   });
