@@ -6,3 +6,8 @@
     <script
       @src bundle.js
   <body
+    <div
+      @id app
+      <div
+        @class count
+        15

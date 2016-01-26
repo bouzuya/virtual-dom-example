@@ -1,4 +1,5 @@
 import * as VirtualDOM from 'virtual-dom';
+import parse from 'vdom-parser';
 
 const createElement = VirtualDOM.create;
 const diff = VirtualDOM.diff;
@@ -12,24 +13,28 @@ type State = {
 };
 
 const init = (): State => {
-  const count = 0;
-  const tree = render(count);
-  const rootNode = createElement(tree);
-  document.body.appendChild(rootNode);
+  const count = 15;
+  const el = document.querySelector('#app');
+  const tree = (el ? parse(el) : render(count));
+  const rootNode = (el ? el : createElement(tree));
+  if (!el) document.body.appendChild(rootNode);
   const state = { count, tree, rootNode };
   return state;
 };
 
 const render = (count: number): VirtualDOM.VNode => {
   return h('div', {
-    style: {
-      textAlign: 'center',
-      lineHeight: (100 + count) + 'px', 
-      border: '1px solid red',
-      width: (100 + count) + 'px',
-      height: (100 + count) + 'px'
-    }
-  }, [String(count)]);
+    id: 'app'
+    // style: {
+    //   textAlign: 'center',
+    //   lineHeight: (100 + count) + 'px',
+    //   border: '1px solid red',
+    //   width: (100 + count) + 'px',
+    //   height: (100 + count) + 'px'
+    // }
+  }, [
+    h('div', { class: 'count' }, [String(count)])
+  ]);
 };
 
 const update = ({ count, tree, rootNode }: State): State => {
@@ -46,6 +51,6 @@ const loop = (state: State): void => {
 
 export default function main() {
   document.addEventListener('DOMContentLoaded', () => {
-    loop(init());
+    setTimeout(() => loop(init()), 3000);
   });
 }
