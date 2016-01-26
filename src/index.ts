@@ -26,7 +26,7 @@ const init = (state: State): App => {
 
 const render = (state: State): VirtualDOM.VNode => {
   return h('div', { id: 'app' }, [
-    h('div', { class: 'count' }, [
+    h('div', { className: 'count' }, [
       String(state.count)
     ])
   ]);
