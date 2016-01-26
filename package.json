@@ -11,6 +11,7 @@
     "url": "https://github.com/bouzuya/virtual-dom-example/issues"
   },
   "dependencies": {
+    "vdom-parser": "^1.2.1",
     "virtual-dom": "^2.1.1"
   },
   "devDependencies": {
