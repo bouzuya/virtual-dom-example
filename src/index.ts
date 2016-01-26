@@ -8,40 +8,45 @@ const patch = VirtualDOM.patch;
 
 type State = {
   count: number;
+};
+
+type App = {
+  state: State;
   tree: VirtualDOM.VNode;
   rootNode: Element;
 };
 
-const init = (): State => {
-  const count = 15;
+const init = (state: State): App => {
   const el = document.querySelector('#app');
-  const tree = (el ? parse(el) : render(count));
+  const tree = (el ? parse(el) : render(state));
   const rootNode = (el ? el : createElement(tree));
   if (!el) document.body.appendChild(rootNode);
-  const state = { count, tree, rootNode };
-  return state;
+  return { state, tree, rootNode };
 };
 
-const render = (count: number): VirtualDOM.VNode => {
+const render = (state: State): VirtualDOM.VNode => {
   return h('div', { id: 'app' }, [
-    h('div', { class: 'count' }, [String(count)])
+    h('div', { class: 'count' }, [
+      String(state.count)
+    ])
   ]);
 };
 
-const update = ({ count, tree, rootNode }: State): State => {
-  const newCount = count + 1;
-  const newTree = render(newCount);
+const update = ({ state, tree, rootNode }: App): App => {
+  const newState = { count: state.count + 1 };
+  const newTree = render(newState);
   const patches = diff(tree, newTree);
   const newRootNode = patch(rootNode, patches);
-  return { count: newCount, tree: newTree, rootNode: newRootNode };
+  return { state: newState, tree: newTree, rootNode: newRootNode };
 };
 
-const loop = (state: State): void => {
-  setTimeout(() => loop(update(state)), 1000);
+const loop = (app: App): void => {
+  setTimeout(() => loop(update(app)), 1000);
 };
 
 export default function main() {
+  const state = { count: 15 };
   document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(() => loop(init()), 3000);
+    setTimeout(() => loop(init(state)), 3000);
   });
 }
