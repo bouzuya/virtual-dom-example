@@ -23,16 +23,7 @@ const init = (): State => {
 };
 
 const render = (count: number): VirtualDOM.VNode => {
-  return h('div', {
-    id: 'app'
-    // style: {
-    //   textAlign: 'center',
-    //   lineHeight: (100 + count) + 'px',
-    //   border: '1px solid red',
-    //   width: (100 + count) + 'px',
-    //   height: (100 + count) + 'px'
-    // }
-  }, [
+  return h('div', { id: 'app' }, [
     h('div', { class: 'count' }, [String(count)])
   ]);
 };
